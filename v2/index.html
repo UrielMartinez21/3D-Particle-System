@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Partículas 3D con Gestos</title>
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Three.js -->
+    <script src="https://unpkg.com/three@0.149.0/build/three.min.js"></script>
+    
+    <!-- MediaPipe Scripts -->
+    <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+    <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"></script>
+    <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+    <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+</head>
+<body>
+    <div id="app">
+        <canvas id="c"></canvas>
+        
+        <!-- Panel de depuración de mano -->
+        <div id="handDebugPanel" class="hand-debug-panel">
+            <div class="hand-debug-header">
+                <h3>Puntos de Mano</h3>
+                <button id="toggleDebug" class="btn-toggle">👁️</button>
+            </div>
+            <canvas id="handCanvas" width="200" height="200"></canvas>
+            <div class="hand-info">
+                <div class="info-item">
+                    <span>Pulgar:</span>
+                    <span id="thumbCoords">—</span>
+                </div>
+                <div class="info-item">
+                    <span>Índice:</span>
+                    <span id="indexCoords">—</span>
+                </div>
+                <div class="info-item">
+                    <span>Distancia:</span>
+                    <span id="pinchDistance">—</span>
+                </div>
+                <div class="info-item">
+                    <span>Puntos detectados:</span>
+                    <span id="landmarkCount">0</span>
+                </div>
+                <div class="info-item">
+                    <span>Gesto detectado:</span>
+                    <span id="gestureType">Ninguno</span>
+                </div>
+                <div class="info-item">
+                    <span>Figura actual:</span>
+                    <span id="currentShape">Galaxy</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Instrucciones simplificadas -->
+        <div class="instructions-panel">
+            <h3>Controles por Gestos</h3>
+            <div class="gesture-list">
+                <div class="gesture-item">
+                    <span>🤜 Puño cerrado:</span>
+                    <span>Saturno</span>
+                </div>
+                <div class="gesture-item">
+                    <span>✌️ Paz y amor:</span>
+                    <span>Corazón</span>
+                </div>
+                <div class="gesture-item">
+                    <span>👋 Mano abierta:</span>
+                    <span>Galaxia</span>
+                </div>
+                <div class="gesture-item">
+                    <span>🔍 Mover mano:</span>
+                    <span>Mover figura</span>
+                </div>
+            </div>
+            <div class="status">
+                <span id="camStatus" class="pill pill--warn">Cámara: inicializando…</span>
+                <span id="handStatus" class="pill">Mano: —</span>
+            </div>
+        </div>
+        
+        <!-- Video oculto (entrada cámara) -->
+        <video id="video" autoplay playsinline muted></video>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
