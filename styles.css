@@ -49,6 +49,107 @@ html,body{ height:100%; margin:0; background: radial-gradient(1200px 800px at 15
   backdrop-filter: blur(10px);
 }
 
+/* Panel de depuración de mano */
+.hand-debug-panel {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 250px;
+  background: linear-gradient(180deg, var(--card2), var(--card));
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+  padding: 15px;
+  font-size: 13px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  z-index: 100;
+}
+
+.hand-debug-panel.hidden {
+  transform: translateX(270px);
+  opacity: 0.3;
+}
+
+.hand-debug-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.hand-debug-header h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.btn-toggle {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--stroke);
+  border-radius: 6px;
+  padding: 4px 6px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.2s ease;
+}
+
+.btn-toggle:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+#handCanvas {
+  width: 100%;
+  height: 200px;
+  border: 1px solid var(--stroke);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  display: block;
+  margin-bottom: 12px;
+}
+
+.hand-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 11px;
+}
+
+.info-item span:first-child {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.info-item span:last-child {
+  color: var(--text);
+  font-weight: 400;
+}
+
+/* Ajustes responsivos para pantallas pequeñas */
+@media (max-width: 768px) {
+  .hand-debug-panel {
+    width: 220px;
+    right: 10px;
+    top: 10px;
+    padding: 12px;
+  }
+  
+  #handCanvas {
+    height: 150px;
+  }
+}
+
 .dot{
   width:12px; height:12px; border-radius:999px;
   background: radial-gradient(circle at 30% 30%, #c6b7ff 0%, #7c5cff 45%, rgba(124,92,255,0) 70%);

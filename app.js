@@ -38,6 +38,16 @@ const smoothLabel = document.getElementById("smoothLabel");
 const camStatus = document.getElementById("camStatus");
 const handStatus = document.getElementById("handStatus");
 
+// Panel de depuración de mano
+const handDebugPanel = document.getElementById("handDebugPanel");
+const toggleDebugBtn = document.getElementById("toggleDebug");
+const handCanvas = document.getElementById("handCanvas");
+const handCtx = handCanvas.getContext("2d");
+const thumbCoords = document.getElementById("thumbCoords");
+const indexCoords = document.getElementById("indexCoords");
+const pinchDistance = document.getElementById("pinchDistance");
+const landmarkCount = document.getElementById("landmarkCount");
+
 countLabel.textContent = countRange.value;
 senseLabel.textContent = senseRange.value;
 smoothLabel.textContent = smoothRange.value;
@@ -336,6 +346,95 @@ let handOffsetSm = new THREE.Vector3(0, 0, 0);
 
 let hasHand = false;
 
+// Función para dibujar los puntos de la mano en el canvas de depuración
+function drawHandLandmarks(landmarks) {
+  handCtx.clearRect(0, 0, handCanvas.width, handCanvas.height);
+  
+  if (!landmarks || landmarks.length === 0) {
+    landmarkCount.textContent = "0";
+    thumbCoords.textContent = "—";
+    indexCoords.textContent = "—";
+    pinchDistance.textContent = "—";
+    return;
+  }
+
+  const width = handCanvas.width;
+  const height = handCanvas.height;
+  
+  landmarkCount.textContent = landmarks.length.toString();
+
+  // Dibujar conexiones de la mano
+  handCtx.strokeStyle = "rgba(255, 255, 255, 0.3)";
+  handCtx.lineWidth = 1;
+  
+  // Conexiones básicas de la mano (simplificadas)
+  const connections = [
+    [0, 1, 2, 3, 4], // Pulgar
+    [0, 5, 6, 7, 8], // Índice
+    [0, 9, 10, 11, 12], // Medio
+    [0, 13, 14, 15, 16], // Anular
+    [0, 17, 18, 19, 20] // Meñique
+  ];
+  
+  connections.forEach(finger => {
+    handCtx.beginPath();
+    for (let i = 0; i < finger.length - 1; i++) {
+      const start = landmarks[finger[i]];
+      const end = landmarks[finger[i + 1]];
+      
+      if (i === 0) {
+        handCtx.moveTo(start.x * width, start.y * height);
+      }
+      handCtx.lineTo(end.x * width, end.y * height);
+    }
+    handCtx.stroke();
+  });
+
+  // Dibujar todos los puntos
+  landmarks.forEach((landmark, index) => {
+    const x = landmark.x * width;
+    const y = landmark.y * height;
+    
+    handCtx.beginPath();
+    handCtx.arc(x, y, 3, 0, 2 * Math.PI);
+    
+    // Colorear puntos importantes
+    if (index === 4) {
+      handCtx.fillStyle = "#ff6b6b"; // Pulgar - rojo
+    } else if (index === 8) {
+      handCtx.fillStyle = "#4ecdc4"; // Índice - cyan
+    } else if (index === 0) {
+      handCtx.fillStyle = "#45b7d1"; // Muñeca - azul
+    } else {
+      handCtx.fillStyle = "rgba(255, 255, 255, 0.6)";
+    }
+    
+    handCtx.fill();
+    
+    // Mostrar número del punto para puntos importantes
+    if ([0, 4, 8, 12, 16, 20].includes(index)) {
+      handCtx.fillStyle = "white";
+      handCtx.font = "10px monospace";
+      handCtx.textAlign = "center";
+      handCtx.fillText(index.toString(), x, y - 8);
+    }
+  });
+  
+  // Actualizar información de coordenadas
+  if (landmarks[4] && landmarks[8]) {
+    const thumb = landmarks[4];
+    const index = landmarks[8];
+    
+    thumbCoords.textContent = `${thumb.x.toFixed(3)}, ${thumb.y.toFixed(3)}`;
+    indexCoords.textContent = `${index.x.toFixed(3)}, ${index.y.toFixed(3)}`;
+    
+    const dx = thumb.x - index.x;
+    const dy = thumb.y - index.y;
+    const distance = Math.hypot(dx, dy);
+    pinchDistance.textContent = distance.toFixed(3);
+  }
+}
+
 async function initHands() {
   try {
     // Solicita cámara
@@ -378,11 +477,15 @@ function onHandResults(results) {
   if (!results.multiHandLandmarks || results.multiHandLandmarks.length === 0) {
     hasHand = false;
     handStatus.textContent = "Mano: no detectada";
+    drawHandLandmarks([]); // Limpiar el canvas de depuración
     return;
   }
   hasHand = true;
 
   const lm = results.multiHandLandmarks[0];
+  
+  // Dibujar los landmarks en el panel de depuración
+  drawHandLandmarks(lm);
 
   // Landmarks importantes:
   // 4: pulgar tip, 8: índice tip, 0: muñeca, 9: middle_mcp (base)
@@ -477,6 +580,11 @@ btnFullscreen.addEventListener("click", async () => {
     if (!document.fullscreenElement) await el.requestFullscreen();
     else await document.exitFullscreen();
   } catch {}
+});
+
+// Toggle del panel de depuración
+toggleDebugBtn.addEventListener("click", () => {
+  handDebugPanel.classList.toggle("hidden");
 });
 
 // Resize

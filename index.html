@@ -19,6 +19,33 @@
     <div id="app">
         <canvas id="c"></canvas>
         
+        <!-- Panel de depuración de mano -->
+        <div id="handDebugPanel" class="hand-debug-panel">
+            <div class="hand-debug-header">
+                <h3>Puntos de Mano</h3>
+                <button id="toggleDebug" class="btn-toggle">👁️</button>
+            </div>
+            <canvas id="handCanvas" width="200" height="200"></canvas>
+            <div class="hand-info">
+                <div class="info-item">
+                    <span>Pulgar:</span>
+                    <span id="thumbCoords">—</span>
+                </div>
+                <div class="info-item">
+                    <span>Índice:</span>
+                    <span id="indexCoords">—</span>
+                </div>
+                <div class="info-item">
+                    <span>Distancia:</span>
+                    <span id="pinchDistance">—</span>
+                </div>
+                <div class="info-item">
+                    <span>Puntos detectados:</span>
+                    <span id="landmarkCount">0</span>
+                </div>
+            </div>
+        </div>
+        
         <div class="ui">
             <div class="ui__top">
                 <div class="brand">
