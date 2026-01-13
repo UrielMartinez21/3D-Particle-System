@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Partículas 3D con Gestos</title>
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Three.js -->
+    <script src="https://unpkg.com/three@0.149.0/build/three.min.js"></script>
+    
+    <!-- MediaPipe Scripts -->
+    <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+    <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"></script>
+    <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+    <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+</head>
+<body>
+    <div id="app">
+        <canvas id="c"></canvas>
+        
+        <div class="ui">
+            <div class="ui__top">
+                <div class="brand">
+                    <div class="dot"></div>
+                    <div class="brand__text">
+                        <div class="brand__title">Partículas 3D</div>
+                        <div class="brand__sub">Gestos en tiempo real</div>
+                    </div>
+                </div>
+                
+                <button id="btnFullscreen" class="btn" title="Pantalla completa">⛶</button>
+            </div>
+            
+            <div class="panel">
+                <label class="field">
+                    <span>Forma</span>
+                    <select id="shapeSelect">
+                        <option value="galaxy" selected>Galaxia</option>
+                        <option value="heart">Corazón</option>
+                        <option value="flower">Flor</option>
+                        <option value="saturn">Saturno</option>
+                        <option value="maria">Maria</option>
+                    </select>
+                </label>
+                
+                <label class="field">
+                    <span>Color</span>
+                    <input id="colorPicker" type="color" value="#7c5cff">
+                </label>
+                
+                <label class="field">
+                    <span>Partículas</span>
+                    <input id="countRange" type="range" min="3000" max="60000" step="1000" value="24000">
+                    <small id="countLabel">24000</small>
+                </label>
+                
+                <label class="field">
+                    <span>Sensibilidad</span>
+                    <input id="senseRange" type="range" min="0.5" max="3" step="0.1" value="1.5">
+                    <small id="senseLabel">1.5</small>
+                </label>
+                
+                <label class="field">
+                    <span>Suavizado</span>
+                    <input id="smoothRange" type="range" min="0.01" max="0.2" step="0.01" value="0.08">
+                    <small id="smoothLabel">0.08</small>
+                </label>
+                
+                <div class="hint">
+                    <b>Tip:</b> abre/cierra la mano (pulgar–índice) para expandir/contraer.
+                    Mueve la mano para desplazar el campo.
+                </div>
+                
+                <div class="status">
+                    <span id="camStatus" class="pill pill--warn">Cámara: inicializando…</span>
+                    <span id="handStatus" class="pill">Mano: —</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Video oculto (entrada cámara) -->
+        <video id="video" autoplay playsinline muted></video>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
