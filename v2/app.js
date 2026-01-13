@@ -414,13 +414,7 @@ function drawHandLandmarks(landmarks) {
     
     handCtx.fill();
     
-    // Mostrar número del punto para puntos importantes
-    if ([0, 4, 8, 12, 16, 20].includes(index)) {
-      handCtx.fillStyle = "white";
-      handCtx.font = "10px monospace";
-      handCtx.textAlign = "center";
-      handCtx.fillText(index.toString(), x, y - 8);
-    }
+    // Numbers removed per user request
   });
   
   // Actualizar información de coordenadas
