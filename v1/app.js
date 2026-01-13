@@ -177,24 +177,84 @@ function generateTemplate(name, count) {
   }
 
   if (name === "flower") {
-    // Flor tipo "rose curve" + volumen
-    // r = cos(k * t) en polar, elevación suave
-    const k = 6;
-    for (let i = 0; i < count; i++) {
-      const t = Math.random() * Math.PI * 2;
-      const r = Math.cos(k * t);
-      const radius = 2.0 * r + (Math.random() - 0.5) * 0.15;
-
-      const x = radius * Math.cos(t);
-      const z = radius * Math.sin(t);
-
-      const lift = (Math.random() - 0.5) * 0.5;
-      const y = lift + 0.12 * Math.sin(t * k);
-
-      arr[i * 3 + 0] = x;
-      arr[i * 3 + 1] = y;
-      arr[i * 3 + 2] = z;
+    // Beautiful multi-layered flower with realistic petals
+    const centerCount = Math.floor(count * 0.15);  // Dense center
+    const innerPetalCount = Math.floor(count * 0.35); // Inner petals
+    const outerPetalCount = count - centerCount - innerPetalCount; // Outer petals
+    
+    let index = 0;
+    
+    // Flower center - dense, circular core
+    for (let i = 0; i < centerCount; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const radius = Math.random() * 0.3; // Small center radius
+      const height = (Math.random() - 0.5) * 0.15;
+      
+      arr[index * 3 + 0] = radius * Math.cos(angle) + (Math.random() - 0.5) * 0.1;
+      arr[index * 3 + 1] = height;
+      arr[index * 3 + 2] = radius * Math.sin(angle) + (Math.random() - 0.5) * 0.1;
+      index++;
     }
+    
+    // Inner petals - 8 main petals
+    const innerPetals = 8;
+    for (let i = 0; i < innerPetalCount; i++) {
+      const petalIndex = Math.floor(Math.random() * innerPetals);
+      const petalAngle = (petalIndex / innerPetals) * Math.PI * 2;
+      const angleVariation = (Math.random() - 0.5) * 0.4; // Petal width
+      const finalAngle = petalAngle + angleVariation;
+      
+      // Petal shape using modified rose curve
+      const t = Math.random() * 0.85 + 0.15; // Distance along petal (0.15 to 1.0)
+      const petalWidth = Math.sin(t * Math.PI) * 0.6; // Width varies along petal
+      const radius = t * (1.2 + petalWidth * 0.5);
+      
+      // Add organic curvature
+      const curve = Math.sin(t * Math.PI * 2) * 0.15;
+      const x = radius * Math.cos(finalAngle) + curve * Math.cos(finalAngle + Math.PI/2);
+      const z = radius * Math.sin(finalAngle) + curve * Math.sin(finalAngle + Math.PI/2);
+      
+      // Petal elevation - higher at tips, lower at center
+      const elevation = t * 0.4 + Math.sin(t * Math.PI) * 0.3;
+      const y = elevation + (Math.random() - 0.5) * 0.08;
+      
+      arr[index * 3 + 0] = x;
+      arr[index * 3 + 1] = y;
+      arr[index * 3 + 2] = z;
+      index++;
+    }
+    
+    // Outer petals - 16 secondary petals for fullness
+    const outerPetals = 16;
+    for (let i = 0; i < outerPetalCount; i++) {
+      const petalIndex = Math.floor(Math.random() * outerPetals);
+      const petalAngle = (petalIndex / outerPetals) * Math.PI * 2;
+      const angleVariation = (Math.random() - 0.5) * 0.3;
+      const finalAngle = petalAngle + angleVariation;
+      
+      // Outer petals are longer and more varied
+      const t = Math.random() * 0.9 + 0.1;
+      const petalWidth = Math.sin(t * Math.PI) * 0.8;
+      let radius = t * (1.8 + petalWidth * 0.3);
+      
+      // Add some randomness to outer petals
+      radius += (Math.random() - 0.5) * 0.4;
+      
+      // More dramatic curvature for outer petals
+      const curve = Math.sin(t * Math.PI * 3) * 0.25;
+      const x = radius * Math.cos(finalAngle) + curve * Math.cos(finalAngle + Math.PI/2);
+      const z = radius * Math.sin(finalAngle) + curve * Math.sin(finalAngle + Math.PI/2);
+      
+      // Outer petals droop slightly
+      const elevation = t * 0.2 + Math.sin(t * Math.PI) * 0.4 - t * 0.15;
+      const y = elevation + (Math.random() - 0.5) * 0.12;
+      
+      arr[index * 3 + 0] = x;
+      arr[index * 3 + 1] = y;
+      arr[index * 3 + 2] = z;
+      index++;
+    }
+    
     return arr;
   }
 
