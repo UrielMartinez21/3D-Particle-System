@@ -312,13 +312,54 @@ function generateTemplate(name, count) {
     return arr;
   }
 
-  if (name === "maria") {
-    // Palabra MARIA en 3D (corregida orientación vertical)
+  if (name === "vortex") {
+    // Tornado/vortex structure (punta abajo, base ancha arriba)
+    const maxHeight = 3.5;
+    const maxRadius = 2.0;
+    const spiralTurns = 8; // Number of spiral turns
+    
+    for (let i = 0; i < count; i++) {
+      // Height position (0 to 1)
+      const h = Math.random();
+      const y = h * maxHeight - maxHeight / 2;
+      
+      // Radius increases as we go UP (inverted tornado shape)
+      // h=0 (bottom) = small radius, h=1 (top) = large radius  
+      const heightFromBottom = (y + maxHeight / 2) / maxHeight; // 0 at bottom, 1 at top
+      const radiusAtHeight = maxRadius * (heightFromBottom * 0.85 + 0.15);
+      
+      // Spiral angle increases with height
+      const spiralAngle = heightFromBottom * spiralTurns * Math.PI * 2;
+      
+      // Add some randomness to the spiral angle
+      const angleVariation = (Math.random() - 0.5) * 0.5;
+      const finalAngle = spiralAngle + angleVariation;
+      
+      // Distance from center with some randomness
+      const radiusVariation = Math.random() * 0.7 + 0.3;
+      const radius = radiusAtHeight * radiusVariation;
+      
+      // Add swirl motion
+      const swirl = Math.sin(h * Math.PI * 4) * 0.2;
+      
+      const x = radius * Math.cos(finalAngle) + swirl * Math.cos(finalAngle + Math.PI/2);
+      const z = radius * Math.sin(finalAngle) + swirl * Math.sin(finalAngle + Math.PI/2);
+      
+      arr[i * 3 + 0] = x;
+      arr[i * 3 + 1] = y;
+      arr[i * 3 + 2] = z;
+    }
+    
+    return arr;
+  }
+
+  if (name === "uriel") {
+    // Palabra URIEL en 3D (corregida orientación vertical)
     const letterWidth = 0.4;
     const letterHeight = 0.8;
     const spacing = 0.6;
     
-    // Calcular posición inicial para centrar "MARIA"
+    // Calcular posición inicial para centrar "URIEL"
     const totalWidth = spacing * 4;
     const startX = totalWidth * 0.5;
     
@@ -339,43 +380,42 @@ function generateTemplate(name, count) {
       }
     }
     
-    // Letra M (primera letra)
-    const mX = startX - spacing * 4;
-    const mY = -letterHeight * 0.5;
-    addLine3D(mX, mY + letterHeight, 0, mX, mY, 0, pointsPerLetter * 0.25);
-    addLine3D(mX, mY, 0, mX + letterWidth * 0.5, mY + letterHeight * 0.4, 0, pointsPerLetter * 0.2);
-    addLine3D(mX + letterWidth * 0.5, mY + letterHeight * 0.4, 0, mX + letterWidth, mY, 0, pointsPerLetter * 0.2);
-    addLine3D(mX + letterWidth, mY, 0, mX + letterWidth, mY + letterHeight, 0, pointsPerLetter * 0.25);
+    // Letra U (primera letra)
+    const uX = startX - spacing * 4;
+    const uY = -letterHeight * 0.5;
+    addLine3D(uX, uY, 0, uX, uY + letterHeight, 0, pointsPerLetter * 0.4);
+    addLine3D(uX, uY + letterHeight, 0, uX + letterWidth, uY + letterHeight, 0, pointsPerLetter * 0.2);
+    addLine3D(uX + letterWidth, uY + letterHeight, 0, uX + letterWidth, uY, 0, pointsPerLetter * 0.4);
     
-    // Letra A (segunda letra)
-    const aX = startX - spacing * 3;
-    const aY = mY;
-    addLine3D(aX, aY + letterHeight, 0, aX + letterWidth * 0.5, aY, 0, pointsPerLetter * 0.3);
-    addLine3D(aX + letterWidth * 0.5, aY, 0, aX + letterWidth, aY + letterHeight, 0, pointsPerLetter * 0.3);
-    addLine3D(aX + letterWidth * 0.2, aY + letterHeight * 0.6, 0, aX + letterWidth * 0.8, aY + letterHeight * 0.6, 0, pointsPerLetter * 0.4);
-    
-    // Letra R (tercera letra)
-    const rX = startX - spacing * 2;
-    const rY = mY;
+    // Letra R (segunda letra)
+    const rX = startX - spacing * 3;
+    const rY = uY;
     addLine3D(rX, rY + letterHeight, 0, rX, rY, 0, pointsPerLetter * 0.25);
     addLine3D(rX, rY, 0, rX + letterWidth * 0.7, rY, 0, pointsPerLetter * 0.2);
     addLine3D(rX + letterWidth * 0.7, rY, 0, rX + letterWidth * 0.7, rY + letterHeight * 0.5, 0, pointsPerLetter * 0.15);
     addLine3D(rX + letterWidth * 0.7, rY + letterHeight * 0.5, 0, rX, rY + letterHeight * 0.5, 0, pointsPerLetter * 0.2);
     addLine3D(rX + letterWidth * 0.3, rY + letterHeight * 0.5, 0, rX + letterWidth * 0.8, rY + letterHeight, 0, pointsPerLetter * 0.2);
     
-    // Letra I (cuarta letra)
-    const iX = startX - spacing;
-    const iY = mY;
+    // Letra I (tercera letra)
+    const iX = startX - spacing * 2;
+    const iY = uY;
     addLine3D(iX + letterWidth * 0.2, iY, 0, iX + letterWidth * 0.8, iY, 0, pointsPerLetter * 0.3);
     addLine3D(iX + letterWidth * 0.5, iY, 0, iX + letterWidth * 0.5, iY + letterHeight, 0, pointsPerLetter * 0.4);
     addLine3D(iX + letterWidth * 0.2, iY + letterHeight, 0, iX + letterWidth * 0.8, iY + letterHeight, 0, pointsPerLetter * 0.3);
     
-    // Letra A (quinta letra)
-    const a2X = startX;
-    const a2Y = mY;
-    addLine3D(a2X, a2Y + letterHeight, 0, a2X + letterWidth * 0.5, a2Y, 0, pointsPerLetter * 0.3);
-    addLine3D(a2X + letterWidth * 0.5, a2Y, 0, a2X + letterWidth, a2Y + letterHeight, 0, pointsPerLetter * 0.3);
-    addLine3D(a2X + letterWidth * 0.2, a2Y + letterHeight * 0.6, 0, a2X + letterWidth * 0.8, a2Y + letterHeight * 0.6, 0, pointsPerLetter * 0.4);
+    // Letra E (cuarta letra)
+    const eX = startX - spacing;
+    const eY = uY;
+    addLine3D(eX, eY + letterHeight, 0, eX, eY, 0, pointsPerLetter * 0.3);
+    addLine3D(eX, eY, 0, eX + letterWidth * 0.8, eY, 0, pointsPerLetter * 0.25);
+    addLine3D(eX, eY + letterHeight * 0.5, 0, eX + letterWidth * 0.6, eY + letterHeight * 0.5, 0, pointsPerLetter * 0.2);
+    addLine3D(eX, eY + letterHeight, 0, eX + letterWidth * 0.8, eY + letterHeight, 0, pointsPerLetter * 0.25);
+    
+    // Letra L (quinta letra)
+    const lX = startX;
+    const lY = uY;
+    addLine3D(lX, lY, 0, lX, lY + letterHeight, 0, pointsPerLetter * 0.6);
+    addLine3D(lX, lY + letterHeight, 0, lX + letterWidth * 0.7, lY + letterHeight, 0, pointsPerLetter * 0.4);
     
     return arr;
   }
