@@ -28,9 +28,46 @@ html,body{ height:100%; margin:0; background: radial-gradient(1200px 800px at 15
   flex-direction:column;
   gap:8px;
   pointer-events:none;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.ui.hidden {
+  transform: translateX(-100%);
+  opacity: 0;
 }
 
 .ui *{ pointer-events:auto; }
+
+/* Floating toggle button when menu is hidden */
+.menu-toggle-floating {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid var(--stroke);
+  background: linear-gradient(180deg, var(--card2), var(--card));
+  color: var(--text);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  font-size: 16px;
+}
+
+.menu-toggle-floating.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.menu-toggle-floating:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255,255,255,.22);
+}
 
 .ui__top{
   display:flex;

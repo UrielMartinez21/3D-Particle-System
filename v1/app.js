@@ -25,6 +25,9 @@ const videoEl = document.getElementById("video");
 const shapeSelect = document.getElementById("shapeSelect");
 const colorPicker = document.getElementById("colorPicker");
 const btnFullscreen = document.getElementById("btnFullscreen");
+const btnToggleMenu = document.getElementById("btnToggleMenu");
+const floatingToggle = document.getElementById("floatingToggle");
+const uiPanel = document.querySelector(".ui");
 
 const countRange = document.getElementById("countRange");
 const countLabel = document.getElementById("countLabel");
@@ -580,6 +583,15 @@ btnFullscreen.addEventListener("click", async () => {
 toggleDebugBtn.addEventListener("click", () => {
   handDebugPanel.classList.toggle("hidden");
 });
+
+// Toggle del menú principal
+function toggleMainMenu() {
+  uiPanel.classList.toggle("hidden");
+  floatingToggle.classList.toggle("visible");
+}
+
+btnToggleMenu.addEventListener("click", toggleMainMenu);
+floatingToggle.addEventListener("click", toggleMainMenu);
 
 // Resize
 window.addEventListener("resize", () => {
