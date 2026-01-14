@@ -151,7 +151,62 @@ html,body{ height:100%; margin:0; background: radial-gradient(1200px 800px at 15
   font-size: 13px;
   z-index: 100;
 }
+/* Controls panel (like v1's UI) */
+.controls-panel{
+  position:absolute;
+  top:18px; left:18px;
+  width:min(280px, calc(100vw - 36px));
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  pointer-events:none;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
 
+.controls-panel *{ pointer-events:auto; }
+
+.controls-panel h3{
+  display:flex; align-items:center; gap:8px;
+  padding:8px 10px;
+  background: linear-gradient(180deg, var(--card2), var(--card));
+  border:1px solid var(--stroke);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.controls-content{
+  padding:10px;
+  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
+  border:1px solid var(--stroke);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+}
+
+.field{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:6px;
+  margin-bottom:8px;
+}
+.field > span{
+  font-size:11px;
+  color:var(--muted);
+}
+
+input[type="range"]{
+  width:100%;
+  accent-color: #7c5cff;
+}
+
+small{
+  color:var(--muted);
+  font-size:10px;
+}
 .instructions-panel h3 {
   margin: 0 0 12px 0;
   font-size: 14px;
@@ -193,25 +248,21 @@ html,body{ height:100%; margin:0; background: radial-gradient(1200px 800px at 15
   gap: 6px;
 }
 
-.pill {
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: 500;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid var(--stroke);
+.pill{
+  font-size:11px;
+  padding:4px 8px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.18);
+  color: rgba(255,255,255,.8);
 }
-
-.pill--warn {
-  background: rgba(255, 193, 7, 0.2);
-  border-color: rgba(255, 193, 7, 0.4);
-  color: #ffc107;
+.pill--ok{
+  border-color: rgba(82, 255, 186, .35);
+  background: rgba(82, 255, 186, .12);
 }
-
-.pill--ok {
-  background: rgba(40, 167, 69, 0.2);
-  border-color: rgba(40, 167, 69, 0.4);
-  color: #28a745;
+.pill--warn{
+  border-color: rgba(255, 212, 92, .35);
+  background: rgba(255, 212, 92, .12);
 }
 
 /* Ajustes responsivos para pantallas pequeñas */

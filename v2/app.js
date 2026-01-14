@@ -30,10 +30,10 @@ const videoEl = document.getElementById("video");
 // Elementos removidos del menú UI
 // const countRange = document.getElementById("countRange");
 // const countLabel = document.getElementById("countLabel");
-// const senseRange = document.getElementById("senseRange");
-// const senseLabel = document.getElementById("senseLabel");
-// const smoothRange = document.getElementById("smoothRange");
-// const smoothLabel = document.getElementById("smoothLabel");
+const senseRange = document.getElementById("senseRange");
+const senseLabel = document.getElementById("senseLabel");
+const smoothRange = document.getElementById("smoothRange");
+const smoothLabel = document.getElementById("smoothLabel");
 
 const camStatus = document.getElementById("camStatus");
 const handStatus = document.getElementById("handStatus");
@@ -52,10 +52,10 @@ const landmarkCount = document.getElementById("landmarkCount");
 const gestureType = document.getElementById("gestureType");
 const currentShape = document.getElementById("currentShape");
 
-// Configuraciones fijas (antes eran controles)
+// Configuraciones (ahora ajustables)
 const FIXED_COUNT = 24000;
-const FIXED_SENSITIVITY = 1.5;
-const FIXED_SMOOTHING = 0.08;
+senseLabel.textContent = senseRange.value;
+smoothLabel.textContent = smoothRange.value;
 
 // ─────────────────────────────────────────────────────────────
 // Three.js: escena
@@ -654,7 +654,14 @@ function requestShape(name) {
 //   material.color = hexToColor(e.target.value);
 // });
 
-// Los controles de count, sense y smooth ya no existen en la UI
+// Los controles ahora sí existen en la UI
+senseRange.addEventListener("input", () => {
+  senseLabel.textContent = senseRange.value;
+});
+
+smoothRange.addEventListener("input", () => {
+  smoothLabel.textContent = smoothRange.value;
+});
 
 // Toggle del panel de depuración
 toggleDebugBtn.addEventListener("click", () => {
@@ -675,8 +682,8 @@ function animate() {
 
   if (controls) controls.update();
 
-  // Suavizado del offset de mano usando valores fijos
-  const smooth = FIXED_SMOOTHING;
+  // Suavizado del offset de mano usando valores dinámicos
+  const smooth = parseFloat(smoothRange.value);
   handOffsetSm.lerp(handOffset, smooth);
 
   // Sin expansión por gesto - escala fija
@@ -692,7 +699,7 @@ function animate() {
 
   // Micro movimiento "vivo" - animación base
   const wobbleAmp = 0.025;
-  const drift = 0.25; // Sensibilidad del movimiento de mano
+  const drift = parseFloat(senseRange.value) * 0.167; // Sensibilidad del movimiento de mano (dinámica)
 
   for (let i = 0; i < COUNT; i++) {
     const ix = i * 3;
