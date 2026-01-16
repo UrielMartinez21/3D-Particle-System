@@ -610,10 +610,11 @@ function onHandResults(results) {
 
   // Posición de mano (centro aproximado: muñeca)
   // Coordenadas MediaPipe: 0..1 (x,y) con origen arriba-izq
-  // Convertimos a un offset suave en mundo
-  const hx = (wrist.x - 0.5) * 3.2;     // -1.6..1.6 aprox
-  const hy = (0.5 - wrist.y) * 2.2;     // -1.1..1.1 aprox
-  handOffset.set(hx, hy, 0);
+  // Convertimos a un offset suave en mundo con mayor rango
+  const hx = (wrist.x - 0.5) * 4.0;     // -2.0..2.0 aprox (mayor rango)
+  const hy = (0.5 - wrist.y) * 3.0;     // -1.5..1.5 aprox (mayor rango)
+  const hz = 0; // Por ahora sin movimiento en Z desde MediaPipe
+  handOffset.set(hx, hy, hz);
 
   handStatus.textContent = `Mano: ${Math.round(gestureOpen * 100)}% abierta`;
 }
@@ -727,7 +728,10 @@ function animate() {
 
   // Micro movimiento "vivo"
   const wobbleAmp = lerp(0.012, 0.045, gestureOpenSm);
-  const drift = 0.16 + 0.10 * gestureOpenSm;
+  
+  // Sensibilidad de movimiento de mano (independiente del gesto)
+  const baseDrift = parseFloat(senseRange.value) * 0.167; // Sensibilidad base del slider
+  const drift = baseDrift; // Movimiento independiente del gesto
 
   for (let i = 0; i < COUNT; i++) {
     const ix = i * 3;
@@ -758,10 +762,11 @@ function animate() {
     y += Math.cos(phase * 1.13 + n * 6.0) * wobbleAmp;
     z += Math.sin(phase * 0.93 + n * 3.0) * wobbleAmp;
 
-    // Desplazamiento por mano (si hay mano, más fuerte)
-    const handPower = hasHand ? 1.0 : 0.25;
+    // Desplazamiento por mano (ahora independiente del gesto)
+    const handPower = hasHand ? 1.2 : 0.0; // Más fuerte cuando hay mano detectada
     x += handOffsetSm.x * drift * handPower;
     y += handOffsetSm.y * drift * handPower;
+    z += handOffsetSm.z * drift * handPower; // Agregar movimiento en Z también
 
     p[ix + 0] = x;
     p[ix + 1] = y;
